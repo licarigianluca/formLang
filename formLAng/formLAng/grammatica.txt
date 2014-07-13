@@ -1,0 +1,80 @@
+﻿form CarLoan 
+{
+	price: "Vehicle price:" money,
+	wantLoan: "Do you request a loan?" boolean,
+	if (wantLoan) 
+	{
+		interest: "Interest rate:" real,
+		months: "Months" integer,
+		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
+	}
+}
+
+
+Grammar :
+
+Form	->	'form' Id Block
+
+Block	->	'{' StatementList '}'	
+
+StatementList	->	Statement StatementListTail | eps
+
+StatementListTail	->	',' Statement StatementList 
+
+Statement	->	Id ':' String Type
+				'if' '(' Guard ')'  Block
+
+Type	->	'integer'	TypeTail	|
+			'real'		TypeTail	|
+			'boolean'	TypeTail	|
+			'money'		TypeTail	|
+			'date'		Typetail	|
+			'string'	TypeTail
+
+TypeTail	->	'('	Expr	')'	|	eps
+
+Guard	->	CondictionList	|	eps
+
+CondictionList	->	Condiction	CondictionListTail	|	eps
+
+CondictionListTail	->	'&'	Condiction	CondictionList	|
+						'|'	Condiction	CondictionList
+								
+Condiction	->	CondictionHead CondictionTail
+
+CondictionHead	->	Expr		|	
+					'!'	Expr
+
+CondictionTail	->	'<'		CondictionHead	|
+					'>'		CondictionHead	|
+					'<='	CondictionHead	|
+					'>='	CondictionHead	|
+					'=='	CondictionHead	|
+					'!='	CondictionHead	|	eps
+
+Expr	->	Term	ExprTail
+
+ExprTail	->	'+'	Term	ExprTail	|	eps
+
+				'-'	Term	ExprTail	|	eps
+
+Term	->	Factor	TermTail
+
+TermTail	->	'*'	Factor	FactorTail	|
+				'/'	Factor	FactorTail	|	eps
+
+Factor	->	'('	Expr ')'	|
+			Id				|
+			Num				|
+			String			|
+			Bool			
+
+Num	->	Base exponent		|
+		'-'	Base exponent	
+
+Base ->	Integer	|	Real
+
+Exponent	->	'^'	ExponentTail	|	eps
+
+ExponentTail	->	Integer			|
+					'-'	Integer	
