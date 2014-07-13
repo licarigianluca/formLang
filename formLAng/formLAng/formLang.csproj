@@ -40,7 +40,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic.cs" />
+    <Compile Include="Base.cs" />
+    <Compile Include="Exponent.cs" />
+    <Compile Include="ExponentTail.cs" />
+    <Compile Include="Expr.cs" />
+    <Compile Include="ExprTail.cs" />
+    <Compile Include="Factor.cs" />
+    <Compile Include="Num.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="Term.cs" />
+    <Compile Include="TermTail.cs" />
     <Compile Include="test.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Tokenizer.cs" />

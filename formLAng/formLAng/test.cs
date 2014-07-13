@@ -11,21 +11,21 @@ class Test
     static void Main(String[] args)
     {
         Console.WriteLine("Start parsing...");
-        string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
-        //string text = "ciao \"ciao   .!= pippo\" true false = !=  + +=  @ # height empty type branchingfactor 123456789 123456.789456 18.1";
-        //string text = "<true,false,\"ciao mondo!\",<2,1>>";
-        //string text = "x=true;";
+        //string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
+        string text = "10,56^-4";
         showToken(text);
-        //parseExpr(text);
+        parseExpr(text);
     }
 
-    //private static void parseExpr(String text)
-    //{
+    private static void parseExpr(String text)
+    {
 
-    //    Parser p = new Parser();
-    //    Program program = p.parse<Program>(text);
-    //    Console.WriteLine("Finish parsing");
-    //}
+        Parser p = new Parser();
+        Num n = p.parse<Num>(text);
+        
+        Console.WriteLine("Finish parsing");
+    }
+
     private static void showToken(String text)
     {
         Tokenizer t = new Tokenizer(text);

@@ -60,8 +60,8 @@ ExprTail	->	'+'	Term	ExprTail	|	eps
 
 Term	->	Factor	TermTail
 
-TermTail	->	'*'	Factor	FactorTail	|
-				'/'	Factor	FactorTail	|	eps
+TermTail	->	'*'	Factor	TermTail	|
+				'/'	Factor	TermTail	|	eps
 
 Factor	->	'('	Expr ')'	|
 			Id				|
@@ -69,8 +69,8 @@ Factor	->	'('	Expr ')'	|
 			String			|
 			Bool			
 
-Num	->	Base exponent		|
-		'-'	Base exponent	
+Num	->	Base Exponent		|
+		'-'	Base Exponent	
 
 Base ->	Integer	|	Real
 
