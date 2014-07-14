@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 public class ExponentTail
 {
-    public Atomic<char> minus { get; private set; }
+    public string id { get; private set; }
     public int intValue { get; private set; }
 
-    public ExponentTail(Atomic<char> minus, int intValue)
+    public ExponentTail(int intValue)
     {
-        this.minus = minus;
         this.intValue = intValue;
+    }
+
+    public ExponentTail(string id)
+    {
+        this.id = id;
     }
 }
 

@@ -35,24 +35,41 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="prove.txt" />
     <Content Include="esempioForm.txt" />
     <Content Include="grammatica.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic.cs" />
     <Compile Include="Base.cs" />
+    <Compile Include="Block.cs" />
+    <Compile Include="Condiction.cs" />
+    <Compile Include="CondictionHead.cs" />
+    <Compile Include="CondictionList.cs" />
+    <Compile Include="CondictionListTail.cs" />
+    <Compile Include="CondictionTail.cs" />
+    <Compile Include="Control.cs" />
     <Compile Include="Exponent.cs" />
     <Compile Include="ExponentTail.cs" />
     <Compile Include="Expr.cs" />
     <Compile Include="ExprTail.cs" />
     <Compile Include="Factor.cs" />
+    <Compile Include="Form.cs" />
+    <Compile Include="Guard.cs" />
     <Compile Include="Num.cs" />
+    <Compile Include="NumTail.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="Statement.cs" />
+    <Compile Include="StatementList.cs" />
+    <Compile Include="StatementListHead.cs" />
+    <Compile Include="StatementListTail.cs" />
     <Compile Include="Term.cs" />
     <Compile Include="TermTail.cs" />
     <Compile Include="test.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Tokenizer.cs" />
+    <Compile Include="Type.cs" />
+    <Compile Include="TypeTail.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,0 +1,9 @@
+﻿
+	if (wantLoan) 
+	{
+		interest: "Interest rate:" real,
+		months: "Months" integer,
+		interest: "Interest rate:" real
+	}
+
+

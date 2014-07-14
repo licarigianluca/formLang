@@ -8,12 +8,12 @@ public class Num
 {
     public Atomic<char> minus { get; private set; }
     public Base b { get; private set; }
-    public Exponent e { get; private set; }
+    public NumTail nt { get; private set; }
 
-    public Num(Atomic<char> minus, Base b, Exponent e)
+    public Num(Atomic<char> minus, Base b, NumTail nt)
     {
         this.minus = minus;
         this.b = b;
-        this.e = e;
+        this.nt = nt;
     }
 }

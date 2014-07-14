@@ -8,6 +8,7 @@ public class Base
 {
     public int intValue { get; private set; }
     public double doubleValue { get; private set; }
+    public string stringValue { get; private set; }
 
     public Base(int intValue)
     {
@@ -17,6 +18,11 @@ public class Base
     public Base(double doubleValue)
     {
         this.doubleValue = doubleValue;
+    }
+
+    public Base(string stringValue)
+    {
+        this.stringValue = stringValue;
     }
 }
 

@@ -14,52 +14,278 @@ public class Parser
         {"Block",new List<int>{(int)type.OPEN_CURLY}},
         {"StatementList",new List<int>{(int)type.ID,(int)type.IF}},
         {"StatementListTail",new List<int>{(int)type.COMMA}},
-        {"Statement",new List<int>{(int)type.ID,(int)type.IF}},
+        {"Statement",new List<int>{(int)type.ID}},
+        {"Control",new List<int>{(int)type.IF}},
         {"Type",new List<int>{(int)type.TYPE_BOOL,(int)type.TYPE_DATE,(int)type.TYPE_MONEY,(int)type.TYPE_REAL,(int)type.TYPE_INT,(int)type.TYPE_STRING}},
         {"TypeTail",new List<int>{(int)type.OPEN_PAR}},
-        {"Guard", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
-        {"CondictionList", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
+        {"Guard", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
+        {"CondictionList", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
         {"CondictionListTail", new List<int>{(int)type.AND,(int)type.OR}},
-        {"Condiction", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
-        {"CondictionHead", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
+        {"Condiction", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
+        {"CondictioinHead", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
         {"CondictionTail",new List<int>{(int)type.LT,(int)type.GE,(int)type.LE,(int)type.GE,(int)type.EQUAL,(int)type.DISEQUAL}},
-        {"Expr", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
+        {"Expr", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
         {"ExprTail",new List<int>{(int)type.PLUS,(int)type.MINUS}},
-        {"Term", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
+        {"Term", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
         {"TermTail",new List<int>{(int)type.TIMES,(int)type.SLASH}},
-        {"Factor", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS,(int)type.ID,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
-        {"Num", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.MINUS}},
-        {"Base", new List<int>{(int)type.INTEGER,(int)type.REAL}},
-        {"Exponent",new List<int>{(int)type.POWER}},
-        {"ExponentTail",new List<int>{(int)type.INTEGER,(int)type.MINUS}}
+        {"Factor", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
+        {"Num", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS}},
+        {"Base", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID}},
+        {"NumTail",new List<int>{(int)type.POWER}},
+        {"Exponent",new List<int>{(int)type.MINUS,(int)type.INTEGER,(int)type.ID}},
+        {"ExponentTail",new List<int>{(int)type.INTEGER,(int)type.ID}}
     };
 
     public Parser()
     {
 
     }
-      
+
     public T parse<T>(String s)
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
-        T p = (T)(Object)Num();
-        
+        T p = (T)(Object)Form();
+
         Match(type.EOF);
         return p;
 
     }
+    //Form	->	'form' Id Block
+    Form Form()
+    {
+        Match(type.FORM);
+        string id = lookahead.value;
+        Match(type.ID);
+        return new Form(id, Block());
+    }
+    //Block	->	'{' StatementList '}'	
+    Block Block()
+    {
+        Match(type.OPEN_CURLY);
+        StatementList sl = StatementList();
+        Match(type.CLOSE_CURLY);
+        return new Block(sl);
+    }
+    //StatementList -> Statement StatementListHead	|
+    //                 Control StatementList		| eps    
+    StatementList StatementList()
+    {
+        if (lookahead.type == (int)type.ID)
+        {
+            return new StatementList(Statement(), StatementListHead());
+        }
+        else if (lookahead.type == (int)type.IF)
+        {
+            return new StatementList(Control(), StatementList());
+        }
+        else return null;
+    }
+    //StatementListHead -> ',' StatementListTail    |   eps
+    StatementListHead StatementListHead()
+    {
+        if (lookahead.type == (int)type.COMMA)
+        {
+            Match(type.COMMA);
+            return new StatementListHead(StatementListTail());
+        }
+        else return null;
+    }
+
+    //StatementListTail-> Statement StatementListHead		|
+    //                    Control StatementList	
+    StatementListTail StatementListTail()
+    {
+        if (lookahead.type == (int)type.ID)
+        {
+            return new StatementListTail(Statement(),StatementListHead());
+        }
+        else 
+        {
+            return new StatementListTail(Control(),StatementList());
+        }
+        
+    }
+
+    //Control   ->  'if' '(' Guard ')'  Block   
+    Control Control()
+    {
+        Atomic<string> ifCode = new Atomic<string>(lookahead.value);
+        Match(type.IF);
+        Match(type.OPEN_PAR);
+        Guard g = Guard();
+        Match(type.CLOSE_PAR);
+        return new Control(ifCode, g, Block());
+    }
+
+    //Statement	->	Id ':' String Type			
+    Statement Statement()
+    {
+        string id = lookahead.value;
+        Match(type.ID);
+        Match(type.COLON);
+        string stringValue = lookahead.value;
+        Match(type.STRING);
+        return new Statement(id, stringValue, Type());
+
+    }
+
+    //Type	->	'integer'	TypeTail	|
+    //          'real'		TypeTail	|
+    //          'boolean'	TypeTail	|
+    //          'money'		TypeTail	|
+    //          'date'		Typetail	|
+    //          'string'	TypeTail
+    Type Type()
+    {
+        int found = firstSets["Type"].Find(x => x == lookahead.type);
+        Atomic<string> typeString = new Atomic<string>(lookahead.value);
+        Match((type)found);
+        return new Type(typeString, TypeTail());
+    }
+
+    //TypeTail	->	'('	Expr	')'	|	eps
+    TypeTail TypeTail()
+    {
+        if (lookahead.type == (int)type.OPEN_PAR)
+        {
+            Match(type.OPEN_PAR);
+            Expr e = Expr();
+            Match(type.CLOSE_PAR);
+            return new TypeTail(e);
+        }
+        else return null;
+    }
+
+    //Guard	->	CondictionList	|	eps
+    Guard Guard()
+    {
+        int found = firstSets["Guard"].Find(x => x == lookahead.type);
+        if (found > 0)
+        {
+            return new Guard(CondictionList());
+        }
+        else return null;
+    }
+
+    //CondictionList	->	Condiction	CondictionListTail	|	eps
+    CondictionList CondictionList()
+    {
+        int found = firstSets["CondictionList"].Find(x => x == lookahead.type);
+        if (found > 0)
+        {
+            return new CondictionList(Condiction(), CondictionList());
+        }
+        else return null;
+    }
+
+    //CondictionListTail	->	'&&'	Condiction	CondictionList	|
+    //                          '||'	Condiction	CondictionList
+    CondictionListTail CondictionListTail()
+    {
+        if (lookahead.type == (int)type.AND)
+        {
+            string op = lookahead.value;
+            Match(type.AND);
+            return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
+        }
+        else
+        {
+            string op = lookahead.value;
+            Match(type.OR);
+            return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
+        }
+    }
+
+    //Condiction	->	CondictionHead CondictionTail
+    Condiction Condiction()
+    {
+        return new Condiction(CondictionHead(), CondictionTail());
+    }
+
+    //CondictionHead	->	Expr		    |	
+    //                      '!'	    Expr
+    CondictionHead CondictionHead()
+    {
+        Atomic<char> not = null;
+        if (lookahead.type == (int)type.NOT)
+        {
+            Match(type.NOT);
+            not = new Atomic<char>('!');
+        }
+
+        return new CondictionHead(not, Expr());
+    }
+
+    //CondictionTail	->	'<'		CondictionHead	|
+    //                      '>'		CondictionHead	|
+    //                      '<='	CondictionHead	|
+    //                      '>='	CondictionHead	|
+    //                      '=='	CondictionHead	|
+    //                      '!='	CondictionHead	|	eps
+    CondictionTail CondictionTail()
+    {
+        int found = firstSets["CondictionTail"].Find(x => x == lookahead.type);
+        if (found > 0)
+        {
+            Atomic<string> op = new Atomic<string>(lookahead.value);
+            Match((type)found);
+            return new CondictionTail(op, CondictionHead());
+        }
+        else return null;
+
+    }
+
+    //Expr	->	Term	ExprTail
+    Expr Expr()
+    {
+        return new Expr(Term(), ExprTail());
+    }
+
+    //ExprTail	->	'+'	Term	ExprTail	|	
+    //              '-'	Term	ExprTail	|	eps
+    ExprTail ExprTail()
+    {
+        if (lookahead.type == (int)type.PLUS)
+        {
+            Match(type.PLUS);
+            return new ExprTail(new Atomic<char>('+'), Term(), ExprTail());
+
+        }
+        else if (lookahead.type == (int)type.MINUS)
+        {
+            Match(type.MINUS);
+            return new ExprTail(new Atomic<char>('-'), Term(), ExprTail());
+
+        }
+        else return null;
+    }
+
+    //Term	->	Factor	TermTail
+    Term Term()
+    {
+        return new Term(Factor(), TermTail());
+    }
+
     //TermTail	->	'*'	Factor	TermTail	|
     //              '/'	Factor	TermTail	|	eps
     TermTail TermTail()
     {
         if (lookahead.type == (int)type.TIMES)
         {
-            
+            Match(type.TIMES);
+            return new TermTail(new Atomic<char>('*'), Factor(), TermTail());
+
         }
+        else if (lookahead.type == (int)type.SLASH)
+        {
+            Match(type.SLASH);
+            return new TermTail(new Atomic<char>('/'), Factor(), TermTail());
+
+        }
+        else return null;
     }
     //Factor	->	'('	Expr ')'	|
-    //               Id				|
     //               Num			|
     //               String			|
     //               Bool			
@@ -73,13 +299,6 @@ public class Parser
             e = Expr();
             Match(type.CLOSE_PAR);
             return new Factor(e);
-        }
-        else if (lookahead.type == (int)type.ID)
-        {
-            string id = lookahead.value;
-            Match(type.ID);
-            return new Factor(id, "ID");
-
         }
         else if (lookahead.type == (int)type.STRING)
         {
@@ -98,11 +317,11 @@ public class Parser
         {
             return new Factor(Num());
         }
-        
+
     }
 
-    //Num	->	Base Exponent		|
-    //          '-'	Base Exponent	
+    //Num	->	Base NumTail		|
+    //          '-'	Base NumTail	
     Num Num()
     {
         Atomic<char> minus = null;
@@ -112,10 +331,12 @@ public class Parser
             minus = new Atomic<char>('-');
         }
 
-        return new Num(minus, Base(), Exponent());
+        return new Num(minus, Base(), NumTail());
     }
 
-    //Base ->	Integer	|	Real
+    //Base ->	Integer	|
+    //          Real    |
+    //          Id
     Base Base()
     {
         if (lookahead.type == (int)type.INTEGER)
@@ -124,28 +345,34 @@ public class Parser
             Match(type.INTEGER);
             return new Base(intValue);
         }
-        else
+        else if (lookahead.type == (int)type.REAL)
         {
             double doubleValue = Convert.ToDouble(lookahead.value);
             Match(type.REAL);
             return new Base(doubleValue);
         }
+        else
+        {
+            string id = lookahead.value;
+            Match(type.ID);
+            return new Base(id);
+        }
     }
 
-    //Exponent	->	'^'	ExponentTail	|	eps
-    Exponent Exponent()
+    //NumTail	->	'^'	Exponent	|	eps
+    NumTail NumTail()
     {
         if (lookahead.type == (int)type.POWER)
         {
             Match(type.POWER);
-            return new Exponent(ExponentTail());
+            return new NumTail(Exponent());
         }
         else return null;
     }
 
-    //ExponentTail	->	Integer			|
-    //                  '-'	Integer	
-    ExponentTail ExponentTail()
+    //Exponent	->	'-'	ExponentTail	|
+    //              ExponentTail		|
+    Exponent Exponent()
     {
         Atomic<char> minus = null;
         if (lookahead.type == (int)type.MINUS)
@@ -154,9 +381,25 @@ public class Parser
             minus = new Atomic<char>('-');
         }
 
-        int intValue = Convert.ToInt32(lookahead.value);
-        Match(type.INTEGER);
-        return new ExponentTail(minus, intValue);
+        return new Exponent(minus, ExponentTail());
+    }
+    //ExponentTail	->	Integer	|
+    //                  Id               
+    ExponentTail ExponentTail()
+    {
+
+        if (lookahead.type == (int)type.INTEGER)
+        {
+            int intValue = Convert.ToInt32(lookahead.value);
+            Match(type.INTEGER);
+            return new ExponentTail(intValue);
+        }
+        else
+        {
+            string id = lookahead.value;
+            Match(type.ID);
+            return new ExponentTail(id);
+        }
 
     }
 

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 public class Exponent
 {
-    public Atomic<char> power { get; private set; }
+    public Atomic<char> minus { get; private set; }
     public ExponentTail et { get; private set; }
 
-    public Exponent(ExponentTail et)
+    public Exponent( Atomic<char> minus, ExponentTail et)
     {
-        this.power = new Atomic<char>('^');
+        this.minus = minus;
         this.et = et;
     }
 }

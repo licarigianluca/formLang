@@ -17,12 +17,17 @@ Form	->	'form' Id Block
 
 Block	->	'{' StatementList '}'	
 
-StatementList	->	Statement StatementListTail | eps
+StatementList -> Statement StatementListHead	|
+				 Control StatementList			| eps
 
-StatementListTail	->	',' Statement StatementList 
+Control  -> 'if' '(' Guard ')'  Block   
 
-Statement	->	Id ':' String Type
-				'if' '(' Guard ')'  Block
+StatementListHead -> ',' StatementListTail	|	eps
+
+StatementListTail-> Statement StatementListHead		|
+					Control StatementList		
+
+Statement	->	Id ':' String Type			
 
 Type	->	'integer'	TypeTail	|
 			'real'		TypeTail	|
@@ -37,8 +42,8 @@ Guard	->	CondictionList	|	eps
 
 CondictionList	->	Condiction	CondictionListTail	|	eps
 
-CondictionListTail	->	'&'	Condiction	CondictionList	|
-						'|'	Condiction	CondictionList
+CondictionListTail	->	'&&'	Condiction	CondictionList	|
+						'||'	Condiction	CondictionList
 								
 Condiction	->	CondictionHead CondictionTail
 
@@ -54,7 +59,7 @@ CondictionTail	->	'<'		CondictionHead	|
 
 Expr	->	Term	ExprTail
 
-ExprTail	->	'+'	Term	ExprTail	|	eps
+ExprTail	->	'+'	Term	ExprTail	|	
 
 				'-'	Term	ExprTail	|	eps
 
@@ -64,17 +69,21 @@ TermTail	->	'*'	Factor	TermTail	|
 				'/'	Factor	TermTail	|	eps
 
 Factor	->	'('	Expr ')'	|
-			Id				|
 			Num				|
 			String			|
 			Bool			
 
-Num	->	Base Exponent		|
-		'-'	Base Exponent	
+Num	->	Base NumTail		|
+		'-'	Base NumTail	
 
-Base ->	Integer	|	Real
+Base ->	Integer	|
+		Real	|	
+		Id
 
-Exponent	->	'^'	ExponentTail	|	eps
+NumTail	->	'^'	Exponent	|	eps
 
-ExponentTail	->	Integer			|
-					'-'	Integer	
+Exponent	->	'-'	ExponentTail	|
+				ExponentTail		|
+
+ExponentTail	->	Integer	|
+					Id

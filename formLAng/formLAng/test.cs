@@ -11,8 +11,8 @@ class Test
     static void Main(String[] args)
     {
         Console.WriteLine("Start parsing...");
-        //string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
-        string text = "10,56^-4";
+        string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
+        //string text = "price * interest / 1200 / (1-(1+price^-months))";
         showToken(text);
         parseExpr(text);
     }
@@ -21,7 +21,7 @@ class Test
     {
 
         Parser p = new Parser();
-        Num n = p.parse<Num>(text);
+        Form n = p.parse<Form>(text);
         
         Console.WriteLine("Finish parsing");
     }
