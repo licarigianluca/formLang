@@ -53,12 +53,17 @@
     <Compile Include="ExponentTail.cs" />
     <Compile Include="Expr.cs" />
     <Compile Include="ExprTail.cs" />
+    <Compile Include="ExtendedParser.cs" />
     <Compile Include="Factor.cs" />
     <Compile Include="Form.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Num.cs" />
     <Compile Include="NumTail.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="SelectList.cs" />
+    <Compile Include="SelectListHead.cs" />
+    <Compile Include="SelectListTail.cs" />
+    <Compile Include="SelectType.cs" />
     <Compile Include="Statement.cs" />
     <Compile Include="StatementList.cs" />
     <Compile Include="StatementListHead.cs" />

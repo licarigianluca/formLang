@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 public class Parser
 {
-    private Tokenizer t;
-    private Token lookahead;
-    private Dictionary<string, List<int>> firstSets = new Dictionary<string, List<int>>(){
+    protected Tokenizer t;
+    protected Token lookahead;
+    protected Dictionary<string, List<int>> firstSets = new Dictionary<string, List<int>>(){
         {"Form",new List<int>{(int)type.FORM}},
         {"Block",new List<int>{(int)type.OPEN_CURLY}},
         {"StatementList",new List<int>{(int)type.ID,(int)type.IF}},
@@ -52,7 +52,7 @@ public class Parser
 
     }
     //Form	->	'form' Id Block
-    Form Form()
+    protected Form Form()
     {
         Match(type.FORM);
         string id = lookahead.value;
@@ -60,7 +60,7 @@ public class Parser
         return new Form(id, Block());
     }
     //Block	->	'{' StatementList '}'	
-    Block Block()
+    protected Block Block()
     {
         Match(type.OPEN_CURLY);
         StatementList sl = StatementList();
@@ -69,7 +69,7 @@ public class Parser
     }
     //StatementList -> Statement StatementListHead	|
     //                 Control StatementList		| eps    
-    StatementList StatementList()
+    protected StatementList StatementList()
     {
         if (lookahead.type == (int)type.ID)
         {
@@ -82,7 +82,7 @@ public class Parser
         else return null;
     }
     //StatementListHead -> ',' StatementListTail    |   eps
-    StatementListHead StatementListHead()
+    protected StatementListHead StatementListHead()
     {
         if (lookahead.type == (int)type.COMMA)
         {
@@ -94,7 +94,7 @@ public class Parser
 
     //StatementListTail-> Statement StatementListHead		|
     //                    Control StatementList	
-    StatementListTail StatementListTail()
+    protected StatementListTail StatementListTail()
     {
         if (lookahead.type == (int)type.ID)
         {
@@ -108,7 +108,7 @@ public class Parser
     }
 
     //Control   ->  'if' '(' Guard ')'  Block   
-    Control Control()
+    protected Control Control()
     {
         Atomic<string> ifCode = new Atomic<string>(lookahead.value);
         Match(type.IF);
@@ -119,7 +119,7 @@ public class Parser
     }
 
     //Statement	->	Id ':' String Type			
-    Statement Statement()
+    protected Statement Statement()
     {
         string id = lookahead.value;
         Match(type.ID);
@@ -136,7 +136,7 @@ public class Parser
     //          'money'		TypeTail	|
     //          'date'		Typetail	|
     //          'string'	TypeTail
-    Type Type()
+    protected Type Type()
     {
         int found = firstSets["Type"].Find(x => x == lookahead.type);
         Atomic<string> typeString = new Atomic<string>(lookahead.value);
@@ -145,7 +145,7 @@ public class Parser
     }
 
     //TypeTail	->	'('	Expr	')'	|	eps
-    TypeTail TypeTail()
+    public virtual TypeTail TypeTail()
     {
         if (lookahead.type == (int)type.OPEN_PAR)
         {
@@ -158,7 +158,7 @@ public class Parser
     }
 
     //Guard	->	CondictionList	|	eps
-    Guard Guard()
+    protected Guard Guard()
     {
         int found = firstSets["Guard"].Find(x => x == lookahead.type);
         if (found > 0)
@@ -169,7 +169,7 @@ public class Parser
     }
 
     //CondictionList	->	Condiction	CondictionListTail	|	eps
-    CondictionList CondictionList()
+    protected CondictionList CondictionList()
     {
         int found = firstSets["CondictionList"].Find(x => x == lookahead.type);
         if (found > 0)
@@ -181,7 +181,7 @@ public class Parser
 
     //CondictionListTail	->	'&&'	Condiction	CondictionList	|
     //                          '||'	Condiction	CondictionList
-    CondictionListTail CondictionListTail()
+    protected CondictionListTail CondictionListTail()
     {
         if (lookahead.type == (int)type.AND)
         {
@@ -198,14 +198,14 @@ public class Parser
     }
 
     //Condiction	->	CondictionHead CondictionTail
-    Condiction Condiction()
+    protected Condiction Condiction()
     {
         return new Condiction(CondictionHead(), CondictionTail());
     }
 
     //CondictionHead	->	Expr		    |	
     //                      '!'	    Expr
-    CondictionHead CondictionHead()
+    protected CondictionHead CondictionHead()
     {
         Atomic<char> not = null;
         if (lookahead.type == (int)type.NOT)
@@ -223,7 +223,7 @@ public class Parser
     //                      '>='	CondictionHead	|
     //                      '=='	CondictionHead	|
     //                      '!='	CondictionHead	|	eps
-    CondictionTail CondictionTail()
+    protected CondictionTail CondictionTail()
     {
         int found = firstSets["CondictionTail"].Find(x => x == lookahead.type);
         if (found > 0)
@@ -237,14 +237,14 @@ public class Parser
     }
 
     //Expr	->	Term	ExprTail
-    Expr Expr()
+    protected Expr Expr()
     {
         return new Expr(Term(), ExprTail());
     }
 
     //ExprTail	->	'+'	Term	ExprTail	|	
     //              '-'	Term	ExprTail	|	eps
-    ExprTail ExprTail()
+    protected ExprTail ExprTail()
     {
         if (lookahead.type == (int)type.PLUS)
         {
@@ -262,14 +262,14 @@ public class Parser
     }
 
     //Term	->	Factor	TermTail
-    Term Term()
+    protected Term Term()
     {
         return new Term(Factor(), TermTail());
     }
 
     //TermTail	->	'*'	Factor	TermTail	|
     //              '/'	Factor	TermTail	|	eps
-    TermTail TermTail()
+    protected TermTail TermTail()
     {
         if (lookahead.type == (int)type.TIMES)
         {
@@ -289,7 +289,7 @@ public class Parser
     //               Num			|
     //               String			|
     //               Bool			
-    Factor Factor()
+    protected Factor Factor()
     {
         Expr e;
 
@@ -322,7 +322,7 @@ public class Parser
 
     //Num	->	Base NumTail		|
     //          '-'	Base NumTail	
-    Num Num()
+    protected Num Num()
     {
         Atomic<char> minus = null;
         if (lookahead.type == (int)type.MINUS)
@@ -337,7 +337,7 @@ public class Parser
     //Base ->	Integer	|
     //          Real    |
     //          Id
-    Base Base()
+    protected Base Base()
     {
         if (lookahead.type == (int)type.INTEGER)
         {
@@ -360,7 +360,7 @@ public class Parser
     }
 
     //NumTail	->	'^'	Exponent	|	eps
-    NumTail NumTail()
+    protected NumTail NumTail()
     {
         if (lookahead.type == (int)type.POWER)
         {
@@ -372,7 +372,7 @@ public class Parser
 
     //Exponent	->	'-'	ExponentTail	|
     //              ExponentTail		|
-    Exponent Exponent()
+    protected Exponent Exponent()
     {
         Atomic<char> minus = null;
         if (lookahead.type == (int)type.MINUS)
@@ -385,7 +385,7 @@ public class Parser
     }
     //ExponentTail	->	Integer	|
     //                  Id               
-    ExponentTail ExponentTail()
+    protected ExponentTail ExponentTail()
     {
 
         if (lookahead.type == (int)type.INTEGER)

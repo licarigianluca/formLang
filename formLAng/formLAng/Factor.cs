@@ -33,13 +33,12 @@ public class Factor
         if (type == "STRING")
         {
             this.stringValue = value;
-            this.type = type;
         }
         else
         {
             this.id = value;
-            this.type = type;
         }
+        this.type = type;
     }
     public Factor(bool boolValue)
     {

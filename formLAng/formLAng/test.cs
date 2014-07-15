@@ -13,17 +13,21 @@ class Test
         Console.WriteLine("Start parsing...");
         string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
         //string text = "price * interest / 1200 / (1-(1+price^-months))";
+        string text2 = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\prove.txt");
+
         showToken(text);
-        parseExpr(text);
+        parseExpr(text, text2);
     }
 
-    private static void parseExpr(String text)
+    private static void parseExpr(String text, String text2)
     {
 
         Parser p = new Parser();
-        Form n = p.parse<Form>(text);
-        
-        Console.WriteLine("Finish parsing");
+        //Form n = p.parse<Form>(text);
+        Console.WriteLine("Finish parsing first method");
+        ExtendedParser ep = new ExtendedParser();
+        Form f = ep.parse<Form>(text2);
+        Console.WriteLine("Finish parsing second method");
     }
 
     private static void showToken(String text)

@@ -10,24 +10,7 @@
 		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
 	
 	}
-	interest: "Interest rate:" real,
-	interest: "Interest rate:" real,
-		months: "Months" integer,
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months))),
-		if (wantLoan) 
-	{
-		interest: "Interest rate:" real,
-		months: "Months" integer
-		if (wantLoan) 
-	{
-		interest: "Interest rate:" real,
-		months: "Months" integer,
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
 	
-	}
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
-	
-	}
 	
 }
 

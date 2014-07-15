@@ -38,6 +38,23 @@ Type	->	'integer'	TypeTail	|
 
 TypeTail	->	'('	Expr	')'	|	eps
 
+///////////////////////////////////////////////////////////////////////////////
+
+TypeTail	->	'('	Expr	')'	|
+				'[' SelectList	']' Id	|	eps
+
+SelectList	->	SelectListHead	SelectListTail	|	eps
+
+SelectListHead	->	SelectType	':'	SelectType
+
+SelectListTail	->	','	SelectListHead	SelectList	|	eps
+
+SelectType:	Id		|
+			Real	|
+			Integer	
+
+/////////////////////////////////////////////////////////////////////////////////
+
 Guard	->	CondictionList	|	eps
 
 CondictionList	->	Condiction	CondictionListTail	|	eps

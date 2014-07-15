@@ -30,7 +30,8 @@ public class Tokenizer
         {"real",(int)type.TYPE_REAL},
         {"boolean",(int)type.TYPE_BOOL},
         {"date",(int)type.TYPE_DATE},
-        {"money",(int)type.TYPE_MONEY}
+        {"money",(int)type.TYPE_MONEY},
+        {"string",(int)type.TYPE_STRING}
     };
     public Tokenizer(String expr)
     {
@@ -81,6 +82,14 @@ public class Tokenizer
         else if (s[idx] == ')')
         {
             t = new Token(s[idx++].ToString(), (int)type.CLOSE_PAR);
+        }
+        else if (s[idx] == '[')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.OPEN_SQUARE);
+        }
+        else if (s[idx] == ']')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.CLOSE_SQUARE);
         }
         else if (s[idx] == ':')
         {
