@@ -1,17 +1,8 @@
-﻿form CarLoan 
+﻿form compilazione 
 {
-	list: "la mia lista:" string[audi:pippo,bmw:3000] price,
-	price: "Vehicle price:" money,
-	wantLoan: "Do you request a loan?" boolean,
-
-	if (wantLoan) 
-	{
-		interest: "Interest rate:" real,
-		months: "Months" integer,
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
-	
-	}
-	
+	paperino: "La divina commedia" string,
+	payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months))),
+	pippo: "Monthly payment:"	boolean
 	
 }
 

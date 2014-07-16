@@ -11,7 +11,7 @@ public class ExtendedParser : Parser
 
     //TypeTail	->	'('	Expr	')'         	|
     //              '[' SelectList	']' Type	|	eps
-      public override TypeTail TypeTail()
+    protected override TypeTail TypeTail()
     {
         if (lookahead.type == (int)type.OPEN_PAR)
         {
@@ -64,8 +64,8 @@ public class ExtendedParser : Parser
     //SelectType    ->  Id		|
     //                  Real	|
     //                  Integer |
-    
-    
+
+
     protected SelectType SelectType()
     {
         if (lookahead.type == (int)type.ID)

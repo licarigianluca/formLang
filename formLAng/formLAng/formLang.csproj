@@ -43,6 +43,7 @@
     <Compile Include="Atomic.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Compiler.cs" />
     <Compile Include="Condiction.cs" />
     <Compile Include="CondictionHead.cs" />
     <Compile Include="CondictionList.cs" />

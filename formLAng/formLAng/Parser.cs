@@ -23,7 +23,7 @@ public class Parser
         {"CondictionListTail", new List<int>{(int)type.AND,(int)type.OR}},
         {"Condiction", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
         {"CondictioinHead", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR,(int)type.NOT}},
-        {"CondictionTail",new List<int>{(int)type.LT,(int)type.GE,(int)type.LE,(int)type.GE,(int)type.EQUAL,(int)type.DISEQUAL}},
+        {"CondictionTail",new List<int>{(int)type.LT,(int)type.GE,(int)type.LE,(int)type.GT,(int)type.EQUAL,(int)type.DISEQUAL}},
         {"Expr", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
         {"ExprTail",new List<int>{(int)type.PLUS,(int)type.MINUS}},
         {"Term", new List<int>{(int)type.INTEGER,(int)type.REAL,(int)type.ID,(int)type.MINUS,(int)type.STRING,(int)type.BOOL,(int)type.OPEN_PAR}},
@@ -145,7 +145,7 @@ public class Parser
     }
 
     //TypeTail	->	'('	Expr	')'	|	eps
-    public virtual TypeTail TypeTail()
+    protected virtual TypeTail TypeTail()
     {
         if (lookahead.type == (int)type.OPEN_PAR)
         {
@@ -174,13 +174,13 @@ public class Parser
         int found = firstSets["CondictionList"].Find(x => x == lookahead.type);
         if (found > 0)
         {
-            return new CondictionList(Condiction(), CondictionList());
+            return new CondictionList(Condiction(), CondictionListTail());
         }
         else return null;
     }
 
     //CondictionListTail	->	'&&'	Condiction	CondictionList	|
-    //                          '||'	Condiction	CondictionList
+    //                          '||'	Condiction	CondictionList  |   eps
     protected CondictionListTail CondictionListTail()
     {
         if (lookahead.type == (int)type.AND)
@@ -189,12 +189,13 @@ public class Parser
             Match(type.AND);
             return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
         }
-        else
+        else if(lookahead.type == (int)type.OR)
         {
             string op = lookahead.value;
             Match(type.OR);
             return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
         }
+        else return null;
     }
 
     //Condiction	->	CondictionHead CondictionTail

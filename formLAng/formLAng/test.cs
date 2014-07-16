@@ -17,17 +17,20 @@ class Test
 
         showToken(text);
         parseExpr(text, text2);
+
     }
 
     private static void parseExpr(String text, String text2)
     {
 
         Parser p = new Parser();
-        //Form n = p.parse<Form>(text);
+        Form n = p.parse<Form>(text);
         Console.WriteLine("Finish parsing first method");
         ExtendedParser ep = new ExtendedParser();
-        Form f = ep.parse<Form>(text2);
+        Form f = ep.parse<Form>(text);
         Console.WriteLine("Finish parsing second method");
+        Compiler c = new Compiler();
+        c.compile(f);
     }
 
     private static void showToken(String text)

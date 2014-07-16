@@ -60,7 +60,7 @@ Guard	->	CondictionList	|	eps
 CondictionList	->	Condiction	CondictionListTail	|	eps
 
 CondictionListTail	->	'&&'	Condiction	CondictionList	|
-						'||'	Condiction	CondictionList
+						'||'	Condiction	CondictionList	|	eps
 								
 Condiction	->	CondictionHead CondictionTail
 

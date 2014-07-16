@@ -20,7 +20,7 @@ public class Factor
     {
         this.openPar = new Atomic<char>('(');
         this.e = e;
-        this.openPar = new Atomic<char>(')');
+        this.closePar = new Atomic<char>(')');
     }
     
     public Factor(Num n)

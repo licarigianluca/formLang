@@ -6,11 +6,11 @@ using System.Text;
 public class CondictionList
 {
     public Condiction c { get; private set; }
-    public CondictionList cl { get; private set; }
+    public CondictionListTail clt { get; private set; }
 
-    public CondictionList(Condiction c, CondictionList cl)
+    public CondictionList(Condiction c, CondictionListTail clt)
     {
         this.c = c;
-        this.cl = cl;
+        this.clt = clt;
     }
 }

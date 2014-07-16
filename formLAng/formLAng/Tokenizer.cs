@@ -144,8 +144,7 @@ public class Tokenizer
             }
             else
             {
-                ignoreBlanks = false;
-                t = new Token(s[idx++].ToString(), (int)type.LT);
+                t= new Token(s[idx++].ToString(), (int)type.LT);
             }
         }
         else if (s[idx] == '>')
@@ -159,7 +158,6 @@ public class Tokenizer
             }
             else
             {
-                ignoreBlanks = false;
                 t = new Token(s[idx++].ToString(), (int)type.GT);
             }
             
@@ -190,7 +188,6 @@ public class Tokenizer
             }
             else
             {
-                ignoreBlanks = false;
                 t = new Token(s[idx++].ToString(), (int)type.NOT);
             }
         }
