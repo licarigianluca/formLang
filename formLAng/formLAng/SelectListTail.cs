@@ -8,13 +8,13 @@ public class SelectListTail
 {
     public Atomic<char> comma { get; private set; }
     public SelectListHead slh { get; private set; }
-    public SelectList sl { get; private set; }
+    public SelectListTail slt { get; private set; }
 
-    public SelectListTail(SelectListHead slh, SelectList sl)
+    public SelectListTail(SelectListHead slh, SelectListTail slt)
     {
         this.comma = new Atomic<char>(',');
         this.slh = slh;
-        this.sl = sl;
+        this.slt = slt;
     }
 }
 

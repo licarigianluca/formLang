@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 public class Compiler
 {
-    private static bool hidden = false;
-    private static string master;
-    private static bool readOnly = false;
+    protected  bool hidden = false;
+    protected bool readOnly = false;
 
     public Compiler()
     {
@@ -103,10 +102,12 @@ public class Compiler
         }
         return output.ToString();
     }
-    protected string compileTypeTail(TypeTail tt)
+    protected virtual string compileTypeTail(TypeTail tt)
     {
         if (tt == null) throw new ArgumentNullException();
         System.Text.StringBuilder output = new System.Text.StringBuilder();
+        //gestione eccezione nel caso in cui si cerchi di compilare una soluzione parsata con il parser base
+        //
         output.Append(string.Format(",\"tag\" : \"input\", \"readOnly\" : false , \"expr\" : \"{0}\"", compileExpr(tt.e)));
         return output.ToString();
     }
@@ -114,11 +115,7 @@ public class Compiler
     protected string compileControl(Control c)
     {
         System.Text.StringBuilder output = new System.Text.StringBuilder();
-        try 
-        { 
-          output.AppendLine(string.Format("{{\"tag\" : \"condiction\", \"cond\" : \"{0}\" ",  compileGuard(c.g)));
-        
-        }
+        try { output.AppendLine(string.Format("{{\"tag\" : \"condiction\", \"cond\" : \"{0}\" ",  compileGuard(c.g)));}
         catch (ArgumentNullException) { }
         hidden = true;
         output.Append(compileBlock(c.b));

@@ -1,5 +1,6 @@
 ﻿form CarLoan 
 {
+	
 	price: "Vehicle price:" money(price * interest / 1200 / (1-(1+price^-months))),
 	wantLoan: "Do you request a loan?" boolean,
 
@@ -7,10 +8,11 @@
 	{
 		interest: "Interest rate:" real,
 		months: "Months" integer,
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months)))
+		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months))),
+		if (!pippo && ciccio<100) 	{interest: "Interest rate:" real}
+
 	
 	}
-	
 	price: "Vehicle price:" money(price * interest / 1200 / (1-(1+price^-months))),
 	ultimo: "Do you request a loan?" boolean
 }

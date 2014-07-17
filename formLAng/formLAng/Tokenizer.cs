@@ -212,7 +212,7 @@ public class Tokenizer
             {
                 lexeme += s[idx++];
             }
-            if (idx < s.Length - 1 && s[idx] == ',')
+            if (idx < s.Length - 1 && s[idx] == '.')
             {
                 dot++;
                 lexeme += s[idx++];

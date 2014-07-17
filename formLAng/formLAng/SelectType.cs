@@ -28,11 +28,13 @@ public class SelectType
     public SelectType(int intValue)
     {
         this.intValue = intValue;
+        this.type = "INTEGER";
     }
 
     public SelectType(double doubleValue)
     {
         this.doubleValue = doubleValue;
+        this.type = "REAL";
     }
 
     

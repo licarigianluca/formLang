@@ -12,7 +12,6 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         string text = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\esempioForm.txt");
-        //string text = "price * interest / 1200 / (1-(1+price^-months))";
         string text2 = System.IO.File.ReadAllText(@"C:\Users\gianlu\Source\Repos\formLang\formLAng\formLAng\prove.txt");
 
         showToken(text);
@@ -22,15 +21,16 @@ class Test
 
     private static void parseExpr(String text, String text2)
     {
-
         Parser p = new Parser();
-        Form n = p.parse<Form>(text);
-        Console.WriteLine("Finish parsing first method");
+        //Form n = p.parse<Form>(text);
+        //Console.WriteLine("Finish parsing first method");
         ExtendedParser ep = new ExtendedParser();
         Form f = ep.parse<Form>(text);
         Console.WriteLine("Finish parsing second method");
         Compiler c = new Compiler();
         c.compile(f);
+        //ExtendedCompiler ec = new ExtendedCompiler();
+        //ec.compile(f);
     }
 
     private static void showToken(String text)

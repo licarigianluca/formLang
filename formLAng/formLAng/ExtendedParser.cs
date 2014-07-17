@@ -50,13 +50,13 @@ public class ExtendedParser : Parser
         return new SelectListHead(st, SelectType());
     }
 
-    //SelectListTail	->	','	SelectListHead	SelectList	|	eps
+    //SelectListTail	->	','	SelectListHead	SelectListTail	|	eps
     protected SelectListTail SelectListTail()
     {
         if (lookahead.type == (int)type.COMMA)
         {
             Match(type.COMMA);
-            return new SelectListTail(SelectListHead(), SelectList());
+            return new SelectListTail(SelectListHead(), SelectListTail());
         }
         else return null;
     }

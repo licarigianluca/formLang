@@ -47,7 +47,7 @@ SelectList	->	SelectListHead	SelectListTail	|	eps
 
 SelectListHead	->	SelectType	':'	SelectType
 
-SelectListTail	->	','	SelectListHead	SelectList	|	eps
+SelectListTail	->	','	SelectListHead	SelectListTail	|	eps
 
 SelectType:	Id		|
 			Real	|
