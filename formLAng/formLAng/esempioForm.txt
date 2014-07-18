@@ -1,20 +1,17 @@
 ﻿form CarLoan 
 {
-	
-	price: "Vehicle price:" money(price * interest / 1200 / (1-(1+price^-months))),
+	data: "prova data" date,
+	price: "Vehicle price:" money,
 	wantLoan: "Do you request a loan?" boolean,
 
-	if (!pippo && ciccio<100) 
+	if (wantLoan) 
 	{
 		interest: "Interest rate:" real,
 		months: "Months" integer,
-		payment: "Monthly payment:"	money(price * interest / 1200 / (1-(1+price^-months))),
-		if (!pippo && ciccio<100) 	{interest: "Interest rate:" real}
-
-	
+		payment: "Monthly payment:"	money(price * interest + months)
+		
 	}
-	price: "Vehicle price:" money(price * interest / 1200 / (1-(1+price^-months))),
-	ultimo: "Do you request a loan?" boolean
+	
 }
 
 

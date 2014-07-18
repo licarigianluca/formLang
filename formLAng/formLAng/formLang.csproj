@@ -59,10 +59,10 @@
     <Compile Include="Base.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Compiler.cs" />
-    <Compile Include="Condiction.cs" />
-    <Compile Include="CondictionHead.cs" />
-    <Compile Include="CondictionList.cs" />
-    <Compile Include="CondictionListTail.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="ConditionHead.cs" />
+    <Compile Include="ConditionList.cs" />
+    <Compile Include="ConditionListTail.cs" />
     <Compile Include="CondictionTail.cs" />
     <Compile Include="Control.cs" />
     <Compile Include="Exponent.cs" />

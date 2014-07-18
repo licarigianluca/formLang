@@ -169,44 +169,44 @@ public class Parser
     }
 
     //CondictionList	->	Condiction	CondictionListTail	|	eps
-    protected CondictionList CondictionList()
+    protected ConditionList CondictionList()
     {
         int found = firstSets["CondictionList"].Find(x => x == lookahead.type);
         if (found > 0)
         {
-            return new CondictionList(Condiction(), CondictionListTail());
+            return new ConditionList(Condiction(), CondictionListTail());
         }
         else return null;
     }
 
     //CondictionListTail	->	'&&'	Condiction	CondictionList	|
     //                          '||'	Condiction	CondictionList  |   eps
-    protected CondictionListTail CondictionListTail()
+    protected ConditionListTail CondictionListTail()
     {
         if (lookahead.type == (int)type.AND)
         {
             string op = lookahead.value;
             Match(type.AND);
-            return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
+            return new ConditionListTail(new Atomic<string>(op), Condiction(), CondictionList());
         }
         else if(lookahead.type == (int)type.OR)
         {
             string op = lookahead.value;
             Match(type.OR);
-            return new CondictionListTail(new Atomic<string>(op), Condiction(), CondictionList());
+            return new ConditionListTail(new Atomic<string>(op), Condiction(), CondictionList());
         }
         else return null;
     }
 
     //Condiction	->	CondictionHead CondictionTail
-    protected Condiction Condiction()
+    protected Condition Condiction()
     {
-        return new Condiction(CondictionHead(), CondictionTail());
+        return new Condition(CondictionHead(), CondictionTail());
     }
 
     //CondictionHead	->	Expr		    |	
     //                      '!'	    Expr
-    protected CondictionHead CondictionHead()
+    protected ConditionHead CondictionHead()
     {
         Atomic<char> not = null;
         if (lookahead.type == (int)type.NOT)
@@ -215,7 +215,7 @@ public class Parser
             not = new Atomic<char>('!');
         }
 
-        return new CondictionHead(not, Expr());
+        return new ConditionHead(not, Expr());
     }
 
     //CondictionTail	->	'<'		CondictionHead	|

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Condiction
+public class Condition
 {
-    public CondictionHead ch { get; private set; }
+    public ConditionHead ch { get; private set; }
     public CondictionTail ct { get; private set; }
 
-    public Condiction(CondictionHead ch, CondictionTail ct)
+    public Condition(ConditionHead ch, CondictionTail ct)
     {
         this.ch = ch;
         this.ct = ct;

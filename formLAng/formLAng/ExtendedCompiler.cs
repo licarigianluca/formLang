@@ -14,12 +14,12 @@ public class ExtendedCompiler : Compiler
         System.Text.StringBuilder output = new System.Text.StringBuilder();
         if (tt.e != null)
         {
-            output.Append(string.Format(",\"tag\" : \"input\", \"readOnly\" : false , \"expr\" : \"{0}\"", compileExpr(tt.e)));
+            output.Append(string.Format(", \"tag\" : \"input\" , \"readOnly\" : true , \"expr\" : \"{0}\"", compileExpr(tt.e)));
         }
         else
         {
-            try { output.Append(string.Format(",\"tag\" : \"select\", \"list\" : {{{0}}}, \"target\" : \"{1}\"", compileSelectList(tt.sl), tt.id)); }
-            catch (ArgumentNullException) { output.Append(string.Format(",\"tag\" : \"select\", \"list\" : \"null\", \"target\" : \"{1}\"", tt.id)); }
+            try { output.Append(string.Format(", \"tag\" : \"select\" , \"list\" : {{{0}}} , \"target\" : \"{1}\"", compileSelectList(tt.sl), tt.id)); }
+            catch (ArgumentNullException) { output.Append(string.Format(", \"tag\" : \"select\" , \"list\" : \"null\" , \"target\" : \"{0}\"", tt.id)); }
         }
         return output.ToString();
     }

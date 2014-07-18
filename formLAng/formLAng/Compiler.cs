@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 public class Compiler
 {
-    protected  bool hidden = false;
-    protected bool readOnly = false;
+    protected bool hidden = false;
+    protected string cond;
 
     public Compiler()
     {
@@ -17,8 +17,11 @@ public class Compiler
     public void compile(Form f)
     {
         string path = @"C:\Users\gianlu\Desktop\PA\output\" + f.id + ".html";
+        string script = "GUIRenderer.js";
         System.Text.StringBuilder output = new System.Text.StringBuilder();
+        output.Append("<!DOCTYPE html><head><script src=\"jquery-1.11.1.min.js\"></script>\n<script src=" + script + "></script></head><body onload=\"init();\">\n<form></form>\n<script>\nvar init = function() {");
         output.Append(compileBlock(f.b));
+        output.Append("}</script></body></html>");
         Console.WriteLine(output.ToString());
         System.IO.File.WriteAllText(path, output.ToString());
 
@@ -82,9 +85,16 @@ public class Compiler
     protected string compileStatement(Statement s)
     {
         System.Text.StringBuilder output = new System.Text.StringBuilder();
-        output.Append(string.Format("{{\"hidden\" : \"{0}\", \"id\" : \"{1}\", \"label\" : {2} ", hidden.ToString().ToLower(), s.id, s.stringValue));
+        if (hidden)
+        {
+            output.Append(string.Format("GUIRenderer({{\"hidden\" : {0} , \"id\" : \"{1}\" , \"label\" : {2} , \"cond\" : \"{3}\" ", hidden.ToString().ToLower(), s.id, s.stringValue, cond));
+        }
+        else
+        {
+            output.Append(string.Format("GUIRenderer({{\"hidden\" : {0} , \"id\" : \"{1}\" , \"label\" : {2} ", hidden.ToString().ToLower(), s.id, s.stringValue));
+        }
         output.Append(compileType(s.t));
-        output.AppendLine("}");
+        output.AppendLine("});");
         return output.ToString();
     }
 
@@ -95,10 +105,7 @@ public class Compiler
         try { output.Append(compileTypeTail(t.tt)); }
         catch (ArgumentNullException)
         {
-            if (t.typeString.value.Equals("boolean"))
-                output.Append(string.Format(", \"tag\" : \"checkbox\"", t.typeString.value));
-            else
-                output.Append(string.Format(", \"tag\" : \"input\", \"readOnly\" : true"));
+            output.Append(string.Format(", \"tag\" : \"input\", \"readOnly\" : false"));
         }
         return output.ToString();
     }
@@ -108,18 +115,19 @@ public class Compiler
         System.Text.StringBuilder output = new System.Text.StringBuilder();
         //gestione eccezione nel caso in cui si cerchi di compilare una soluzione parsata con il parser base
         //
-        output.Append(string.Format(",\"tag\" : \"input\", \"readOnly\" : false , \"expr\" : \"{0}\"", compileExpr(tt.e)));
+        output.Append(string.Format(", \"tag\" : \"input\" , \"readOnly\" : true , \"expr\" : \"{0}\"", compileExpr(tt.e)));
         return output.ToString();
     }
 
     protected string compileControl(Control c)
     {
         System.Text.StringBuilder output = new System.Text.StringBuilder();
-        try { output.AppendLine(string.Format("{{\"tag\" : \"condiction\", \"cond\" : \"{0}\" ",  compileGuard(c.g)));}
+        try { cond= compileGuard(c.g);}
         catch (ArgumentNullException) { }
         hidden = true;
         output.Append(compileBlock(c.b));
         hidden = false;
+        cond = "";
         return output.ToString();
 
     }
@@ -133,7 +141,7 @@ public class Compiler
         return output.ToString();
     }
 
-    protected string compileCondictionList(CondictionList cl)
+    protected string compileCondictionList(ConditionList cl)
     {
         if (cl == null) throw new ArgumentNullException();
         System.Text.StringBuilder output = new System.Text.StringBuilder();
@@ -144,7 +152,7 @@ public class Compiler
         return output.ToString();
     }
 
-    protected string compileCondictionListTail(CondictionListTail clt)
+    protected string compileCondictionListTail(ConditionListTail clt)
     {
         if (clt == null) throw new ArgumentNullException();
         System.Text.StringBuilder output = new System.Text.StringBuilder();
@@ -155,7 +163,7 @@ public class Compiler
         return output.ToString();
     }
 
-    protected string compileCondiction(Condiction c)
+    protected string compileCondiction(Condition c)
     {
         System.Text.StringBuilder output = new System.Text.StringBuilder();
         output.Append(compileCondictionHead(c.ch));
@@ -164,7 +172,7 @@ public class Compiler
         return output.ToString();
     }
 
-    protected string compileCondictionHead(CondictionHead ch)
+    protected string compileCondictionHead(ConditionHead ch)
     {
         System.Text.StringBuilder output = new System.Text.StringBuilder();
         if (ch.not != null) output.Append(ch.not.value);

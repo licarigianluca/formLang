@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 public class Guard
 {
-    public CondictionList cl { get; private set; }
+    public ConditionList cl { get; private set; }
 
-    public Guard(CondictionList cl)
+    public Guard(ConditionList cl)
     {
         this.cl = cl;
     }

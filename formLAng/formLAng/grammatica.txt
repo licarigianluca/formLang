@@ -38,9 +38,9 @@ Type	->	'integer'	TypeTail	|
 
 TypeTail	->	'('	Expr	')'	|	eps
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////EXTENDED PART/////////////////////////////////
 
-TypeTail	->	'('	Expr	')'	|
+TypeTail	->	'('	Expr	')'	|					//OVERRIDE
 				'[' SelectList	']' Id	|	eps
 
 SelectList	->	SelectListHead	SelectListTail	|	eps
@@ -62,17 +62,17 @@ CondictionList	->	Condiction	CondictionListTail	|	eps
 CondictionListTail	->	'&&'	Condiction	CondictionList	|
 						'||'	Condiction	CondictionList	|	eps
 								
-Condiction	->	CondictionHead CondictionTail
+Condition	->	ConditionHead ConditionTail
 
-CondictionHead	->	Expr		|	
+ConditionHead	->	Expr		|	
 					'!'	Expr
 
-CondictionTail	->	'<'		CondictionHead	|
-					'>'		CondictionHead	|
-					'<='	CondictionHead	|
-					'>='	CondictionHead	|
-					'=='	CondictionHead	|
-					'!='	CondictionHead	|	eps
+ConditionTail	->	'<'		ConditionHead	|
+					'>'		ConditionHead	|
+					'<='	ConditionHead	|
+					'>='	ConditionHead	|
+					'=='	ConditionHead	|
+					'!='	ConditionHead	|	eps
 
 Expr	->	Term	ExprTail
 
