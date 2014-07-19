@@ -1,0 +1,239 @@
+\documentclass[10pt]{article}
+\usepackage{multicol}
+\linespread{0.1}
+\usepackage[a4paper,top=0.1cm,bottom=0.1cm,left=0.5cm,right=0.5cm]{geometry}
+\usepackage[italian]{babel}
+\usepackage{syntax}
+ \usepackage[T1]{fontenc}
+ \usepackage{listings}
+ \usepackage{xcolor}
+ \lstset{
+showstringspaces=false
+sensitive=true,
+morekeywords=[1]{
+abstract, as, base, break, case,
+catch, checked, class, const, continue,
+default, delegate, do, else, enum,
+event, explicit, extern, false,
+finally, fixed, for, foreach, goto, if,
+implicit, in, interface, internal, is,
+lock, namespace, new, null, operator,
+out, override, params, private,
+protected, public, readonly, ref,
+return, sealed, sizeof, stackalloc,
+static, struct, switch, this, throw,
+true, try, typeof, unchecked, unsafe,
+using, virtual, volatile, while, bool,
+byte, char, decimal, double, float,
+int, lock, object, sbyte, short, string,
+uint, ulong, ushort, void},
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+morecomment=[l][keywordstyle4]{\#},
+morestring=[b]",
+morestring=[b]',
+}
+ \begin{document}
+\title{Programmazione Avanzata}
+%maketitle
+\section*{Esercizio 1}
+\addcontentsline{toc}{section}{Esercizio 1}
+\textbf{Hierarchy of classes representing the DSL forms:}
+\begin{multicols}{2}
+
+
+\lstinputlisting[firstline=8,lastline=8]{Parser.cs}
+\lstinputlisting[firstline=7,lastline=7]{Compiler.cs}
+\lstinputlisting[firstline=17,lastline=17]{Tokenizer.cs}
+\lstinputlisting[firstline=7,lastline=7]{Token.cs}
+\lstinputlisting[firstline=7,lastline=7]{Form.cs}
+\lstinputlisting[firstline=7,lastline=7]{Block.cs}
+\lstinputlisting[firstline=7,lastline=7]{StatementList.cs}
+\lstinputlisting[firstline=7,lastline=7]{Statement.cs}
+\lstinputlisting[firstline=7,lastline=7]{Control.cs}
+\lstinputlisting[firstline=7,lastline=7]{StatementListHead.cs}
+\lstinputlisting[firstline=7,lastline=7]{StatementListTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Type.cs}
+\lstinputlisting[firstline=7,lastline=7]{TypeTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Guard.cs}
+\lstinputlisting[firstline=7,lastline=7]{ConditionList.cs}
+\lstinputlisting[firstline=7,lastline=7]{ConditionListTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Condition.cs}
+\lstinputlisting[firstline=7,lastline=7]{ConditionHead.cs}
+\lstinputlisting[firstline=7,lastline=7]{ConditionTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Expr.cs}
+\lstinputlisting[firstline=7,lastline=7]{ExprTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Term.cs}
+\lstinputlisting[firstline=7,lastline=7]{TermTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Factor.cs}
+\lstinputlisting[firstline=7,lastline=7]{Num.cs}
+\lstinputlisting[firstline=7,lastline=7]{Base.cs}
+\lstinputlisting[firstline=7,lastline=7]{NumTail.cs}
+\lstinputlisting[firstline=7,lastline=7]{Exponent.cs}
+\lstinputlisting[firstline=7,lastline=7]{ExponentTail.cs}
+\lstinputlisting[firstline=4,lastline=4]{Atomic.cs}
+\end{multicols}
+
+\section*{Esercizio 2}
+\addcontentsline{toc}{section}{Esercizio 2}
+\textbf{The grammar from wich I have made the parser:}
+\setlength{\grammarparsep}{1pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{12em} % increase separation between LHS/RHS 
+\begin{multicols}{2}
+\begin{grammar}
+
+<Form>	::=	'form'  Id  <Block>
+
+<Block>	::=	 `{' <StatementList> `}'
+
+<StatementList>	::=	<Statement> <StatementListHead>
+\alt <Control> <StatementList>
+\alt <empty> 
+
+<Statement> ::=	Id `:' String <Type>	
+
+<Control> 	::=	 `if'  `(' <Guard> `)' <Block>
+
+<StatementListHead>	::= `,' <StatementListTail>
+\alt <empty> 
+
+<StatementListTail>  ::= <Statement> <StatementListHead>		
+\alt			<Control> <StatementList>	
+
+<Type>	::=	`integer'	<TypeTail>	
+\alt			`real'		<TypeTail>	
+\alt			`boolean'	<TypeTail>	
+\alt			`money'	<TypeTail>	
+\alt			`date'		<Typetail>	
+\alt			`string'	<TypeTail>
+
+<TypeTail>	::=	`('	<Expr>	`)'	
+\alt<empty>
+
+<Guard>	::=	<ConditionList>	
+\alt	<empty>
+
+<ConditionList>	::=	<Condition>	<ConditionListTail>	
+\alt	<empty>
+
+<ConditionListTail>	::=	`&&'	<Condition>	<ConditionList>	
+\alt					`||'	<Condition>	<ConditionList>	
+\alt	<empty>
+								
+<Condition>	::=	<ConditionHead> <ConditionTail>
+
+<ConditionHead>	::=	<Expr>		\alt	
+					`!'	<Expr>
+
+<ConditionTail>	::=	`<'		<ConditionHead>	
+\alt				`>'		<ConditionHead>	
+\alt				`<='	<ConditionHead>	
+\alt				`>='	<ConditionHead>	
+\alt				`=='	<ConditionHead>	
+\alt				`!='	<ConditionHead>	
+\alt	<empty>
+
+<Expr>	::=	<Term>	<ExprTail>
+
+<ExprTail>	::=	`+'     <Term>	<ExprTail>
+\alt			`-'	<Term>	<ExprTail>	
+\alt	<empty>
+
+<Term>	::=	<Factor>	<TermTail>
+
+<TermTail>	::=	`*'	<Factor>	<TermTail>	
+\alt			`/'	<Factor>	<TermTail>
+\alt	<empty>
+
+<Factor>	::=	`('	<Expr> `)'
+\alt		<Num>				
+\alt		String			
+\alt		Bool			
+
+<Num>	::=	<Base> <NumTail>	
+\alt		`-'	<Base> <NumTail>	
+
+<Base> ::=	Integer	
+\alt	Real	
+\alt	Id
+
+<NumTail>	::=	`^'	<Exponent>	
+\alt	<empty>
+
+<Exponent>	::=	`-'	<ExponentTail>	
+\alt				<ExponentTail>
+
+
+<ExponentTail>	::=	Integer	
+\alt					Id
+
+\end{grammar}
+\end{multicols}
+\paragraph{The Code:}
+\lstinputlisting[firstline=8,lastline=221]{Parser.cs}
+\lstinputlisting[firstline=17,lastline=159]{Tokenizer.cs}
+\lstinputlisting[firstline=7,lastline=14]{Token.cs}
+\lstinputlisting[firstline=7,lastline=16]{Form.cs}
+\lstinputlisting[firstline=7,lastline=16]{Block.cs}
+\lstinputlisting[firstline=7,lastline=20]{StatementList.cs}
+\lstinputlisting[firstline=7,lastline=18]{Statement.cs}
+\lstinputlisting[firstline=7,lastline=20]{Control.cs}
+\lstinputlisting[firstline=7,lastline=14]{StatementListHead.cs}
+\lstinputlisting[firstline=7,lastline=23]{StatementListTail.cs}
+\lstinputlisting[firstline=7,lastline=14]{Type.cs}
+\lstinputlisting[firstline=7,lastline=26]{TypeTail.cs}
+\lstinputlisting[firstline=7,lastline=12]{Guard.cs}
+\lstinputlisting[firstline=7,lastline=14]{ConditionList.cs}
+\lstinputlisting[firstline=7,lastline=16]{ConditionListTail.cs}
+\lstinputlisting[firstline=7,lastline=14]{Condition.cs}
+\lstinputlisting[firstline=7,lastline=14]{ConditionHead.cs}
+\lstinputlisting[firstline=7,lastline=14]{ConditionTail.cs}
+\lstinputlisting[firstline=7,lastline=14]{Expr.cs}
+\lstinputlisting[firstline=7,lastline=16]{ExprTail.cs}
+\lstinputlisting[firstline=7,lastline=14]{Term.cs}
+\lstinputlisting[firstline=7,lastline=16]{TermTail.cs}
+\lstinputlisting[firstline=7,lastline=32]{Factor.cs}
+\lstinputlisting[firstline=7,lastline=16]{Num.cs}
+\lstinputlisting[firstline=7,lastline=24]{Base.cs}
+\lstinputlisting[firstline=7,lastline=15]{NumTail.cs}
+\lstinputlisting[firstline=7,lastline=14]{Exponent.cs}
+\lstinputlisting[firstline=7,lastline=19]{ExponentTail.cs}
+\lstinputlisting[firstline=4,lastline=9]{Atomic.cs}
+
+\section*{Esercizio 3}
+\addcontentsline{toc}{section}{Esercizio 3}
+\lstinputlisting[firstline=2]{GUIRenderer.js}
+\section*{Esercizio 4}
+
+\addcontentsline{toc}{section}{Esercizio 4}
+\lstinputlisting[firstline=7,lastline=223]{Compiler.cs}
+\textbf{the code produced after compilation phase:}
+\lstinputlisting[firstline=7,lastline=223]{carLoan.html}
+\section*{Esercizio 5}
+\addcontentsline{toc}{section}{Esercizio 5}
+\begin{grammar}
+<TypeTail>	::=	`('	<Expr>	`)'
+\alt			`[' <SelectList>	`]' Id	
+\alt	<empty>
+
+<SelectList>	::=	<SelectListHead>	<SelectListTail>
+\alt	<empty>
+
+<SelectListHead>	::=	<SelectType>	`:'	<SelectType>
+
+<SelectListTail>	::=	`,'	<SelectListHead>	<SelectListTail>	
+\alt	<empty>
+
+<SelectType>	::=	Id		
+\alt 		Real	
+\alt		Integer	
+
+\end{grammar}
+\lstinputlisting[firstline=8,lastline=221]{ExtendedParser.cs}
+\lstinputlisting[firstline=7,,lastline=223]{ExtendedCompiler.cs}
+ \end{document}
+
+
+
+
+

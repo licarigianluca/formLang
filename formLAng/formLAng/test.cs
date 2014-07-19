@@ -20,16 +20,16 @@ class Test
 
     private static void parseExpr(String text, String text2)
     {
-        //Parser p = new Parser();
-        //Form n = p.parse<Form>(text);
-        //Console.WriteLine("Finish parsing first method");
-        ExtendedParser ep = new ExtendedParser();
-        Form f = ep.parse<Form>(text);
-        Console.WriteLine("Finish parsing second method");
-        //Compiler c = new Compiler();
-        //c.compile(f);
-        ExtendedCompiler ec = new ExtendedCompiler();
-        ec.compile(f);
+        Parser p = new Parser();
+        Form n = p.parse<Form>(text);
+        Console.WriteLine("Finish parsing first method");
+        //ExtendedParser ep = new ExtendedParser();
+        //Form f = ep.parse<Form>(text);
+        //Console.WriteLine("Finish parsing second method");
+        Compiler c = new Compiler();
+        c.compile(n);
+        //ExtendedCompiler ec = new ExtendedCompiler();
+        //ec.compile(f);
     }
 
     private static void showToken(String text)

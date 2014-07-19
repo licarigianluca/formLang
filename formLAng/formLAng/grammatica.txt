@@ -13,94 +13,107 @@
 
 Grammar :
 
-Form	->	'form' Id Block
+<Form>	::=	`form` Id <Block>
 
-Block	->	'{' StatementList '}'	
+<Block>	::=	`{` <StatementList> `}`	
 
-StatementList -> Statement StatementListHead	|
-				 Control StatementList			| eps
+<StatementList> ::= <Statement> <StatementListHead>	
+\alt <Control> <StatementList>			
+\alt <empty>
 
-Control  -> 'if' '(' Guard ')'  Block   
+<Control>  ::= `if` `(` <Guard> `)`  <Block>   
 
-StatementListHead -> ',' StatementListTail	|	eps
+<StatementListHead> ::= `,` <StatementListTail>	
+\alt	<empty>
 
-StatementListTail-> Statement StatementListHead		|
-					Control StatementList		
+<StatementListTail>::= <Statement> <StatementListHead>		
+\alt					<Control> <StatementList>		
 
-Statement	->	Id ':' String Type			
+<Statement>	::=	Id `:` String <Type>			
 
-Type	->	'integer'	TypeTail	|
-			'real'		TypeTail	|
-			'boolean'	TypeTail	|
-			'money'		TypeTail	|
-			'date'		Typetail	|
-			'string'	TypeTail
+<Type>	::=	`integer`	<TypeTail>	\alt
+			`real`		<TypeTail>	\alt
+			`boolean`	<TypeTail>	\alt
+			`money`		<TypeTail>	\alt
+			`date`		<TypeTail>	\alt
+			`string`	<TypeTail>
 
-TypeTail	->	'('	Expr	')'	|	eps
+<TypeTail>	::=	`(`	<Expr>	`)`	
+\alt	<empty>
 
 ////////////////////////////////////EXTENDED PART/////////////////////////////////
 
-TypeTail	->	'('	Expr	')'	|					//OVERRIDE
-				'[' SelectList	']' Id	|	eps
+<TypeTail>	::=	`('	<Expr>	`)''	
+\alt			`[' <SelectList>	`]' Id	
+\alt	<empty>
 
-SelectList	->	SelectListHead	SelectListTail	|	eps
+<SelectList>	::=	<SelectListHead>	<SelectListTail>
+\alt	<empty>
 
-SelectListHead	->	SelectType	':'	SelectType
+<SelectListHead>	::=	<SelectType>	`:'	<SelectType>
 
-SelectListTail	->	','	SelectListHead	SelectListTail	|	eps
+<SelectListTail>	::=	`,'	<SelectListHead>	<SelectListTail>	
+\alt	<empty>
 
-SelectType:	Id		|
-			Real	|
-			Integer	
+<SelectType>:	Id		
+\alt 		Real	
+\alt		Integer	
 
 /////////////////////////////////////////////////////////////////////////////////
 
-Guard	->	CondictionList	|	eps
+<Guard>	::=	<ConditionList>	
+\alt	<empty>
 
-CondictionList	->	Condiction	CondictionListTail	|	eps
+<ConditionList>	::=	<Condition>	<ConditionListTail>	
+\alt	<empty>
 
-CondictionListTail	->	'&&'	Condiction	CondictionList	|
-						'||'	Condiction	CondictionList	|	eps
+<ConditionListTail>	::=	`&&`	<Condition>	<ConditionList>	
+\alt					`||`	<Condition>	<ConditionList>	
+\alt	<empty>
 								
-Condition	->	ConditionHead ConditionTail
+<Condition>	::=	<ConditionHead> <ConditionTail>
 
-ConditionHead	->	Expr		|	
-					'!'	Expr
+<ConditionHead>	::=	<Expr>		\alt	
+					`!`	<Expr>
 
-ConditionTail	->	'<'		ConditionHead	|
-					'>'		ConditionHead	|
-					'<='	ConditionHead	|
-					'>='	ConditionHead	|
-					'=='	ConditionHead	|
-					'!='	ConditionHead	|	eps
+<ConditionTail>	::=	`<`		<ConditionHead>	
+\alt				`>`		<ConditionHead>	
+\alt				`<=`	<ConditionHead>	
+\alt				`>=`	<ConditionHead>	
+\alt				`==`	<ConditionHead>	
+\alt				`!=`	<ConditionHead>	
+\alt	<empty>
 
-Expr	->	Term	ExprTail
+<Expr>	::=	<Term>	<ExprTail>
 
-ExprTail	->	'+'	Term	ExprTail	|	
+<ExprTail>	::=	`+`	<Term>	<ExprTail>
+\alt			`-`	<Term>	<ExprTail>	
+\alt	<empty>
 
-				'-'	Term	ExprTail	|	eps
+<Term>	::=	<Factor>	<TermTail>
 
-Term	->	Factor	TermTail
+<TermTail>	::=	`*`	<Factor>	<TermTail>	
+\alt			`/`	<Factor>	<TermTail>
+\alt	<empty>
 
-TermTail	->	'*'	Factor	TermTail	|
-				'/'	Factor	TermTail	|	eps
+<Factor>	::=	`(`	<Expr> `)`
+\alt		<Num>				
+\alt		String			
+\alt		Bool			
 
-Factor	->	'('	Expr ')'	|
-			Num				|
-			String			|
-			Bool			
+<Num>	::=	<Base> <NumTail>	
+\alt		`-`	<Base> <NumTail>	
 
-Num	->	Base NumTail		|
-		'-'	Base NumTail	
+<Base> ::=	Integer	
+\alt	Real	
+\alt	Id
 
-Base ->	Integer	|
-		Real	|	
-		Id
+<NumTail>	::=	`^`	<Exponent>	
+\alt	<empty>
 
-NumTail	->	'^'	Exponent	|	eps
+<Exponent>	::=	`-`	<ExponentTail>	
+\alt				<ExponentTail>
 
-Exponent	->	'-'	ExponentTail	|
-				ExponentTail		|
 
-ExponentTail	->	Integer	|
-					Id
+<ExponentTail>	::=	Integer	
+\alt					Id

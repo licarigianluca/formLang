@@ -63,7 +63,7 @@
     <Compile Include="ConditionHead.cs" />
     <Compile Include="ConditionList.cs" />
     <Compile Include="ConditionListTail.cs" />
-    <Compile Include="CondictionTail.cs" />
+    <Compile Include="ConditionTail.cs" />
     <Compile Include="Control.cs" />
     <Compile Include="Exponent.cs" />
     <Compile Include="ExponentTail.cs" />

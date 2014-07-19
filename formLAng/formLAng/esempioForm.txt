@@ -1,6 +1,5 @@
 ﻿form CarLoan 
 {
-	data: "prova data" date,
 	price: "Vehicle price:" money,
 	wantLoan: "Do you request a loan?" boolean,
 

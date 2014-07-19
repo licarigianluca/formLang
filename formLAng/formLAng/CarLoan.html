@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+	<script src="jquery-1.11.1.min.js"></script>
+
+	<script src=GUIRenderer.js></script>
+</head>
+<body onload="init();">
+
+<form></form>
+
+<script>
+var init = function() {
+GUIRenderer({"hidden" : false , "id" : "price" , "label" : "Vehicle price:" ,"type" : "money", "tag" : "input", "readOnly" : false});
+GUIRenderer({"hidden" : false , "id" : "wantLoan" , "label" : "Do you request a loan?" ,"type" : "boolean", "tag" : "input", "readOnly" : false});
+GUIRenderer({"hidden" : true , "id" : "interest" , "label" : "Interest rate:" , "cond" : "wantLoan" ,"type" : "real", "tag" : "input", "readOnly" : false});
+GUIRenderer({"hidden" : true , "id" : "months" , "label" : "Months" , "cond" : "wantLoan" ,"type" : "integer", "tag" : "input", "readOnly" : false});
+GUIRenderer({"hidden" : true , "id" : "payment" , "label" : "Monthly payment:" , "cond" : "wantLoan" ,"type" : "money", "tag" : "input" , "readOnly" : true , "expr" : "price*interest+months"});
+}
+</script>
+</body>
+</html>

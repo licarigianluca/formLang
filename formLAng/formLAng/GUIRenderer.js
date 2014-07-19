@@ -1,4 +1,5 @@
-﻿var GUIRenderer = function(obj)
+﻿
+var GUIRenderer = function(obj)
 {
     var form = $('form');
     var div = $(document.createElement('div'));
